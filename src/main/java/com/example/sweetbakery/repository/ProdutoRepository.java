@@ -11,5 +11,5 @@ import java.util.Optional;
 
 public interface ProdutoRepository extends JpaRepository<Produto,Long> {
     boolean existsProdutoById(String id);
-    Optional<List<Produto>> findByStatusNot(EnumStatusProduto status);
+    Optional<List<Produto>> findByStatusProdutoNot(EnumStatusProduto statusProduto);
 }

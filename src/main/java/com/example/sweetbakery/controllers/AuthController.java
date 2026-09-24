@@ -28,6 +28,9 @@ public class AuthController {
     @Autowired
     private ConfeiteiraRepository confeiteiraRepository;
 
+    @Autowired
+    private ConfeiteiraRepository clienteRepository;
+
     @PostMapping("/login")
     @Operation(summary = "Login", description = "Método responsavel por efetuar o login do usuário!")
     public ResponseEntity<?> login(@RequestBody LoginRequest resquest) {
@@ -36,6 +39,10 @@ public class AuthController {
 
         if (confeiteiraRepository.existsUsuarioByEmailAndSenha(resquest.email(), resquest.senha())) {
 
+            var token = tokenService.gerarToken(resquest);
+
+            return ResponseEntity.ok(new LoginResponse(token));
+        } else if (clienteRepository.existsUsuarioByEmailAndSenha(resquest.email(), resquest.senha())) {
             var token = tokenService.gerarToken(resquest);
 
             return ResponseEntity.ok(new LoginResponse(token));

@@ -17,4 +17,7 @@ public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
+
+    private EnumStatusProduto statusProduto;
+
 }

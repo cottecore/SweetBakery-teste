@@ -17,4 +17,10 @@ public class Encomenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
+
+    private String prazo;
+
+    private String classificacao;
+
+    private EnumStatusEncomenda statusEncomenda;
 }

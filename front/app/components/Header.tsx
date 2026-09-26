@@ -1,32 +1,60 @@
+"use client";
 
+import { useEffect, useState } from "react";
 
-export default function Header(){
+export default function Header() {
+  const [email, setEmail] = useState("");
 
-    return (
-        <header className="w-full bg-blue-900 border-b border-blue-800 shadow-md">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center text-blue-100 shadow-inner">
-                        <svg xmlns="http://www.w3.org/2000/svg" 
-                        className="w-6 h-6" 
-                        viewBox="0 0 24 24" 
-                        fill="none" 
-                        stroke="currentColor" 
-                        strokeWidth="2" 
-                        strokeLinecap="round" 
-                        strokeLinejoin="round">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
-                    </div>
-                    <span 
-                    className="text-blue-100 font-medium text-sm sm:text-base">
-                        Usuário Samuel matos</span>
-                </div>
-                <button 
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium text-sm rounded-lg transition-colors duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    Sair</button>
-            </div>
-        </header>
-    );
+  useEffect(() => {
+    const emailSalvo = localStorage.getItem("emailUsuario");
 
+    if (emailSalvo) {
+      setEmail(emailSalvo);
+    }
+  }, []);
+
+  const sair = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("emailUsuario");
+
+    window.location.href = "/login";
+  };
+
+  return (
+    <header className="w-full bg-white border-b border-pink-100 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+
+        {/* Identificação do usuário */}
+        <div className="flex items-center space-x-3">
+
+          <div className="w-10 h-10 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 shadow-inner">
+            <span className="text-xl">
+              🧁
+            </span>
+          </div>
+
+          <div>
+            <span className="block text-sm font-semibold text-green-900">
+              SweetBakery
+            </span>
+
+            <span className="block text-xs text-gray-500">
+              {email || "Usuário"}
+            </span>
+          </div>
+
+        </div>
+
+        {/* Botão sair */}
+        <button
+          type="button"
+          onClick={sair}
+          className="px-4 py-2 bg-pink-400 hover:bg-pink-500 text-white font-medium text-sm rounded-xl transition-colors duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-300"
+        >
+          Sair
+        </button>
+
+      </div>
+    </header>
+  );
 }

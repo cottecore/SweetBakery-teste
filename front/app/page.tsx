@@ -1,311 +1,237 @@
-import Link from "@/node_modules/next/link";
-
+import Link from "next/link";
 
 export default function Home() {
   return (
-    <>
-    {/* Estilos embutidos para teste rápido (ou você pode mover para o seu globals.css) */}
-    <style dangerouslySetInnerHTML={{ __html: `
-      :root {
-          --primary-blue: #0056b3;
-          --primary-dark: #003366;
-          --primary-light: #e6f0fa;
-          --accent-blue: #00a8cc;
-          --text-main: #333333;
-          --text-muted: #666666;
-          --bg-color: #f9fbff;
-          --white: #ffffff;
-          --transition: all 0.3s ease;
-      }
+    <div className="min-h-screen bg-[#fffafc] text-[#33443a]">
 
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-      }
+      {/* Cabeçalho */}
+      <header className="fixed top-0 left-0 w-full z-50 bg-white/95 backdrop-blur border-b border-pink-100 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
-      body {
-          font-family: 'Inter', sans-serif;
-          background-color: var(--bg-color);
-          color: var(--text-main);
-          line-height: 1.6;
-      }
+          <Link
+            href="/"
+            className="flex items-center gap-3"
+          >
+            <div className="w-11 h-11 rounded-full bg-pink-100 flex items-center justify-center text-2xl">
+              🧁
+            </div>
 
-      a {
-          text-decoration: none;
-          color: inherit;
-      }
+            <div>
+              <h1 className="font-bold text-xl text-green-900">
+                Sweet<span className="text-pink-500">Bakery</span>
+              </h1>
 
-      header {
-          background-color: var(--white);
-          box-shadow: 0 2px 10px rgba(0, 86, 179, 0.05);
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          z-index: 1000;
-      }
+              <p className="text-xs text-gray-500">
+                Confeitaria & Encomendas
+              </p>
+            </div>
+          </Link>
 
-      .nav-container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 1.2rem 2rem;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-      }
+          <nav className="flex items-center gap-3">
+            <Link
+              href="#sobre"
+              className="hidden sm:block px-4 py-2 text-sm font-medium text-green-800 hover:text-pink-500 transition"
+            >
+              Sobre
+            </Link>
 
-      .logo {
-          font-size: 1.5rem;
-          font-weight: 800;
-          color: var(--primary-dark);
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-      }
+            <Link
+              href="#recursos"
+              className="hidden sm:block px-4 py-2 text-sm font-medium text-green-800 hover:text-pink-500 transition"
+            >
+              Recursos
+            </Link>
 
-      .logo span {
-          color: var(--accent-blue);
-      }
+            <Link
+              href="/login"
+              className="px-5 py-2.5 bg-pink-400 hover:bg-pink-500 text-white rounded-full font-semibold shadow-md transition"
+            >
+              Entrar
+            </Link>
+          </nav>
+        </div>
+      </header>
 
-      .nav-links {
-          display: flex;
-          gap: 2rem;
-          list-style: none;
-          align-items: center;
-      }
+      {/* Hero */}
+      <main>
+        <section className="pt-32 pb-20 px-6">
+          <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
 
-      .nav-links a:not(.btn-login) {
-          color: var(--text-muted);
-          font-weight: 600;
-          transition: var(--transition);
-      }
+            <div>
+              <span className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-full text-sm font-semibold mb-6">
+                🍰 Gestão de confeitaria
+              </span>
 
-      .nav-links a:not(.btn-login):hover {
-          color: var(--primary-blue);
-      }
+              <h2 className="text-4xl md:text-6xl font-bold leading-tight text-green-950">
+                Suas encomendas,
+                <span className="text-pink-500"> mais doces.</span>
+              </h2>
 
-      .btn-login {
-          background-color: var(--primary-blue);
-          color: var(--white);
-          padding: 0.6rem 1.5rem;
-          border-radius: 50px;
-          font-weight: 600;
-          transition: var(--transition);
-          box-shadow: 0 4px 12px rgba(0, 86, 179, 0.2);
-      }
+              <p className="mt-6 text-lg text-gray-600 leading-relaxed max-w-xl">
+                A SweetBakery ajuda confeiteiras e clientes a controlar
+                produtos, encomendas, valores e prazos em um único lugar.
+              </p>
 
-      .btn-login:hover {
-          background-color: var(--primary-dark);
-          transform: translateY(-2px);
-      }
+              <div className="mt-8 flex flex-wrap gap-4">
+                <Link
+                  href="/login"
+                  className="px-7 py-3.5 bg-green-600 hover:bg-green-700 text-white rounded-xl font-semibold shadow-lg transition"
+                >
+                  Acessar sistema
+                </Link>
 
-      .hero {
-          padding: 10rem 2rem 6rem;
-          max-width: 1200px;
-          margin: 0 auto;
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4rem;
-          align-items: center;
-      }
+                <Link
+                  href="#recursos"
+                  className="px-7 py-3.5 bg-pink-50 hover:bg-pink-100 text-pink-700 rounded-xl font-semibold transition"
+                >
+                  Conhecer recursos
+                </Link>
+              </div>
+            </div>
 
-      .hero-content h1 {
-          font-size: 3.2rem;
-          line-height: 1.2;
-          color: var(--primary-dark);
-          margin-bottom: 1.5rem;
-      }
+            <div className="relative">
+              <div className="absolute inset-0 bg-pink-200/30 blur-3xl rounded-full"></div>
 
-      .hero-content h1 span {
-          color: var(--accent-blue);
-      }
+              <div className="relative bg-gradient-to-br from-pink-100 to-green-100 rounded-[2rem] p-10 shadow-xl border border-white">
+                <div className="text-center">
+                  <div className="text-8xl mb-6">
+                    🧁
+                  </div>
 
-      .hero-content p {
-          font-size: 1.1rem;
-          color: var(--text-muted);
-          margin-bottom: 2.5rem;
-      }
+                  <h3 className="text-3xl font-bold text-green-900">
+                    SweetBakery
+                  </h3>
 
-      .hero-buttons {
-          display: flex;
-          gap: 1rem;
-      }
+                  <p className="mt-3 text-green-700">
+                    Controle completo para sua confeitaria.
+                  </p>
+                </div>
 
-      .btn-primary {
-          background-color: var(--primary-blue);
-          color: var(--white);
-          padding: 0.9rem 2rem;
-          border-radius: 8px;
-          font-weight: 700;
-          transition: var(--transition);
-      }
+                <div className="grid grid-cols-2 gap-4 mt-8">
+                  <div className="bg-white/80 rounded-2xl p-4 text-center">
+                    <div className="text-2xl">🍰</div>
+                    <p className="text-sm font-semibold text-green-800 mt-2">
+                      Produtos
+                    </p>
+                  </div>
 
-      .btn-primary:hover {
-          background-color: var(--primary-dark);
-      }
+                  <div className="bg-white/80 rounded-2xl p-4 text-center">
+                    <div className="text-2xl">📦</div>
+                    <p className="text-sm font-semibold text-green-800 mt-2">
+                      Encomendas
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-      .hero-card {
-          background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
-          border-radius: 20px;
-          padding: 3rem;
-          color: var(--white);
-          box-shadow: 0 20px 40px rgba(0, 51, 102, 0.2);
-          position: relative;
-          overflow: hidden;
-      }
-
-      .hero-card h3 {
-          font-size: 1.8rem;
-          margin-bottom: 1rem;
-      }
-
-      .hero-card p {
-          opacity: 0.9;
-      }
-
-      .about {
-          background-color: var(--white);
-          padding: 6rem 2rem;
-      }
-
-      .about-container {
-          max-width: 900px;
-          margin: 0 auto;
-          text-align: center;
-      }
-
-      .about h2 {
-          font-size: 2.5rem;
-          color: var(--primary-dark);
-          margin-bottom: 1.5rem;
-      }
-
-      .about p {
-          font-size: 1.15rem;
-          color: var(--text-muted);
-          line-height: 1.8;
-          margin-bottom: 3rem;
-      }
-
-      .features-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 2rem;
-          text-align: left;
-          margin-top: 3rem;
-      }
-
-      .feature-box {
-          background-color: var(--primary-light);
-          padding: 2rem;
-          border-radius: 12px;
-          transition: var(--transition);
-      }
-
-      .feature-box:hover {
-          transform: translateY(-5px);
-      }
-
-      .feature-box h4 {
-          color: var(--primary-dark);
-          margin-bottom: 0.8rem;
-          font-size: 1.2rem;
-      }
-
-      .feature-box p {
-          font-size: 0.95rem;
-          margin-bottom: 0;
-      }
-
-      footer {
-          background-color: var(--primary-dark);
-          color: var(--white);
-          text-align: center;
-          padding: 2rem;
-          font-size: 0.9rem;
-      }
-
-      @media (max-width: 768px) {
-          .hero {
-              grid-template-columns: 1fr;
-              text-align: center;
-              padding-top: 8rem;
-          }
-          .hero-buttons {
-              justify-content: center;
-          }
-          .nav-links {
-              display: none;
-          }
-          .hero-content h1 {
-              font-size: 2.5rem;
-          }
-      }
-    `}} />
-
-    {/* Cabeçalho */}
-    <header>
-      <div className="nav-container">
-        <a href="#" className="logo">🎓 Aulunao <span>2026</span></a>
-        <ul className="nav-links">
-          <li><a href="#sobre">Nossa História</a></li>
-          <li><a href="#recursos">Recursos</a></li>
-          <li>
-            
-            <Link href="/login" className="btn-login">Entrar</Link>
-          </li>
-
-          
-          
-        </ul>
-      </div>
-    </header>
-
-    {/* Seção Hero */}
-    <main>
-      <section className="hero">
-        <div className="hero-content">
-          <h1>Controle inteligente para alunos da <span>graduação Senac</span></h1>
-          <p>Facilidade incomparável de cadastro, controle avançado de perfil de usuário e gestão otimizada de acessos acadêmicos em um só lugar.</p>
-          <div className="hero-buttons">
-            <a href="#sobre" className="btn-primary">Conhecer o Projeto</a>
           </div>
-        </div>
-        <div className="hero-card">
-          <h3>Aulunao 2026</h3>
-          <p>Desenvolvido sob medida para otimizar a rotina acadêmica, trazendo segurança, agilidade e autonomia para a graduação.</p>
-        </div>
-      </section>
+        </section>
 
-      {/* Seção Nossa História */}
-      <section className="about" id="sobre">
-        <div className="about-container">
-          <h2>Nossa História</h2>
-          <p>O <strong>Aulunao</strong> nasceu como um projeto focado no controle de usuários dedicados a alunos da graduação do Senac. Ele foi idealizado e construído tendo em mente a máxima facilidade de cadastro, um rigoroso controle de perfil de usuário e uma gestão de acessos simplificada e segura.</p>
-          
-          <div className="features-grid" id="recursos">
-            <div className="feature-box">
-              <h4>Fácil Cadastro</h4>
-              <p>Processo de onboarding intuitivo e rápido para novos alunos ingressantes.</p>
+        {/* Sobre */}
+        <section
+          id="sobre"
+          className="py-20 px-6 bg-white"
+        >
+          <div className="max-w-4xl mx-auto text-center">
+
+            <span className="text-pink-500 font-semibold">
+              Sobre a SweetBakery
+            </span>
+
+            <h2 className="text-3xl md:text-4xl font-bold text-green-950 mt-2">
+              Organização para deixar a confeitaria mais simples
+            </h2>
+
+            <p className="mt-6 text-gray-600 text-lg leading-relaxed">
+              A SweetBakery foi desenvolvida para facilitar o controle de
+              produtos, clientes, confeiteiras e encomendas, permitindo
+              acompanhar cada pedido desde sua criação até a entrega.
+            </p>
+
+          </div>
+        </section>
+
+        {/* Recursos */}
+        <section
+          id="recursos"
+          className="py-20 px-6 bg-green-50"
+        >
+          <div className="max-w-7xl mx-auto">
+
+            <div className="text-center mb-12">
+              <span className="text-pink-500 font-semibold">
+                Recursos
+              </span>
+
+              <h2 className="text-3xl md:text-4xl font-bold text-green-950 mt-2">
+                Tudo para controlar sua confeitaria
+              </h2>
             </div>
-            <div className="feature-box">
-              <h4>Controle de Perfil</h4>
-              <p>Gestão centralizada de dados acadêmicos e preferências do usuário.</p>
-            </div>
-            <div className="feature-box">
-              <h4>Gestão de Acessos</h4>
-              <p>Controle dinâmico e seguro voltado ao ecossistema da graduação Senac.</p>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-pink-100">
+                <div className="text-4xl mb-4">👩‍🍳</div>
+                <h3 className="text-xl font-bold text-green-900">
+                  Confeiteiras
+                </h3>
+                <p className="text-gray-600 mt-2">
+                  Cadastro e gerenciamento das confeiteiras.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-pink-100">
+                <div className="text-4xl mb-4">👤</div>
+                <h3 className="text-xl font-bold text-green-900">
+                  Clientes
+                </h3>
+                <p className="text-gray-600 mt-2">
+                  Controle dos clientes e seus pedidos.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-pink-100">
+                <div className="text-4xl mb-4">🧁</div>
+                <h3 className="text-xl font-bold text-green-900">
+                  Produtos
+                </h3>
+                <p className="text-gray-600 mt-2">
+                  Organização dos produtos e suas classificações.
+                </p>
+              </div>
+
+              <div className="bg-white rounded-3xl p-6 shadow-sm border border-pink-100">
+                <div className="text-4xl mb-4">📦</div>
+                <h3 className="text-xl font-bold text-green-900">
+                  Encomendas
+                </h3>
+                <p className="text-gray-600 mt-2">
+                  Acompanhe o status e prazo de cada encomenda.
+                </p>
+              </div>
+
             </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
 
-    {/* Rodapé */}
-    <footer>
-      <p>&copy; 2026 Aulunao. Todos os direitos reservados. Projeto Acadêmico Graduação Senac.</p>
-    </footer>
-  </>
+      </main>
+
+      {/* Rodapé */}
+      <footer className="bg-green-950 text-green-100 py-8 text-center">
+        <p className="font-semibold">
+          🍰 SweetBakery
+        </p>
+
+        <p className="text-sm text-green-300 mt-1">
+          Controle de Encomendas de Confeitaria
+        </p>
+
+        <p className="text-xs text-green-400 mt-4">
+          © {new Date().getFullYear()} SweetBakery. Todos os direitos reservados.
+        </p>
+      </footer>
+
+    </div>
   );
 }

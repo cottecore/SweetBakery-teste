@@ -1,130 +1,416 @@
-'use client'
+"use client";
 
-import { Usuario, UsuarioFormProps } from "@/app/types/usuario";
-import axios from "@/node_modules/axios/index";
-import Link from "@/node_modules/next/link";
-import { useRouter } from "@/node_modules/next/navigation";
+import {
+  Usuario,
+  UsuarioFormProps,
+  TipoUsuario,
+} from "@/app/types/usuario";
+
+import axios from "axios";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
+export default function UsuarioForm({
+  usuarioExistente,
+}: UsuarioFormProps) {
+  const router = useRouter();
 
+  const [usuario, setUsuario] = useState<Usuario>(
+    usuarioExistente ||
+      new Usuario(
+        null,
+        "",
+        "",
+        "ATIVO",
+        "",
+        "",
+        "CONFEITEIRA"
+      )
+  );
 
-export default function UsuarioForm({usuarioExistente}:UsuarioFormProps) {
-    const router = useRouter();
+  const [carregando, setCarregando] = useState(false);
 
-    const [ usuario,setUsuario ] = useState<Usuario>(
-        usuarioExistente ||
-        new Usuario(null,"","","ATIVO","","")
-    );
+  const handlerChange = (
+    campo: "nome" | "email" | "cpf" | "senha",
+    valor: string
+  ) => {
+    setUsuario((anterior) => {
+      return new Usuario(
+        anterior.id,
+        campo === "nome" ? valor : anterior.nome,
+        campo === "email" ? valor : anterior.email,
+        anterior.status,
+        campo === "cpf" ? valor : anterior.cpf,
+        campo === "senha" ? valor : anterior.senha,
+        anterior.tipo
+      );
+    });
+  };
 
-    const handlerChange = ( campo: 'nome'|  'email' |'cpf'| 'senha', valor:string) =>{
-        setUsuario(valorAnterior => 
-            new Usuario(
-                valorAnterior.id,
-                campo === 'nome' ? valor : valorAnterior.nome,
-                campo === 'email' ? valor : valorAnterior.email,
-                valorAnterior.status,
-                campo === 'cpf' ? valor : valorAnterior.cpf,
-                campo === 'senha' ? valor : valorAnterior.senha
-            )
-        )
-    }
+  const alterarTipo = (tipo: TipoUsuario) => {
+    setUsuario((anterior) => {
+      return new Usuario(
+        anterior.id,
+        anterior.nome,
+        anterior.email,
+        anterior.status,
+        anterior.cpf,
+        anterior.senha,
+        tipo
+      );
+    });
+  };
 
+  const handlerSalvar = async () => {
+    setCarregando(true);
 
+    try {
+      /*
+       * =====================================
+       * EDITAR CONFEITEIRA
+       * =====================================
+       */
+      if (usuarioExistente) {
+        const token = localStorage.getItem("token");
 
-    const handlerSalvar = async (formData : FormData) =>{
+        const resposta = await axios.put(
+          `http://localhost:8080/usuarios/${usuario.id}`,
+          {
+            id: usuario.id,
+            nome: usuario.nome,
+            cpf: usuario.cpf,
+            email: usuario.email,
+            senha: usuario.senha,
+            status: usuario.status,
+          },
+          token
+            ? {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            : undefined
+        );
 
-    if(usuarioExistente){
-        var dadosRetorno = await  
-        axios.put<number>('http://localhost:8080/usuarios'+usuario.id,usuario);
-
-        if(dadosRetorno.status==200){
-            alert("Usuário foi salvo com sucesso!");
-        }else{
-            alert(dadosRetorno.data);
-
-            return;
+        if (resposta.status === 200) {
+          alert("Confeiteira atualizada com sucesso!");
+          router.push("/usuarios");
         }
 
+        return;
+      }
 
-    }else{
-        var dadosRetorno = await  axios.post<number>('http://localhost:8080/usuarios',usuario)
+      /*
+       * =====================================
+       * CADASTRAR CLIENTE
+       * =====================================
+       */
+      if (usuario.tipo === "CLIENTE") {
+        const resposta = await axios.post(
+          "http://localhost:8080/cliente",
+          {
+            nome: usuario.nome,
+            cpf: usuario.cpf,
+            email: usuario.email,
+            senha: usuario.senha,
+            status: "ATIVO",
+          }
+        );
 
-        if(dadosRetorno.status==200){
-            alert("Usuário foi salvo com sucesso!");
-        }else{
-            alert(dadosRetorno.data);
-
-            return;
+        if (
+          resposta.status === 200 ||
+          resposta.status === 201
+        ) {
+          alert("Cliente cadastrado com sucesso!");
+          router.push("/cliente");
         }
-    
+
+        return;
+      }
+
+      /*
+       * =====================================
+       * CADASTRAR CONFEITEIRA
+       * =====================================
+       *
+       * IMPORTANTE:
+       * O Swagger mostrou que este endpoint
+       * funciona sem Authorization.
+       *
+       * Portanto NÃO estamos enviando token aqui.
+       */
+      const resposta = await axios.post(
+        "http://localhost:8080/usuarios",
+        {
+          nome: usuario.nome,
+          cpf: usuario.cpf,
+          senha: usuario.senha,
+          email: usuario.email,
+          status: "ATIVO",
+        }
+      );
+
+      if (
+        resposta.status === 200 ||
+        resposta.status === 201
+      ) {
+        alert("Confeiteira cadastrada com sucesso!");
+        router.push("/usuarios");
+      }
+
+    } catch (error: any) {
+      console.error("=================================");
+      console.error("ERRO AO SALVAR CADASTRO");
+      console.error("=================================");
+
+      if (error.response) {
+        console.error("Status:", error.response.status);
+        console.error("Resposta:", error.response.data);
+
+        if (error.response.status === 400) {
+          alert(
+            typeof error.response.data === "string"
+              ? error.response.data
+              : "Os dados informados são inválidos."
+          );
+        } else if (error.response.status === 401) {
+          alert(
+            "Você não está autorizado a realizar esta operação."
+          );
+        } else if (error.response.status === 403) {
+          alert(
+            "Acesso negado pelo servidor."
+          );
+        } else if (error.response.status === 500) {
+          alert(
+            "O servidor encontrou um erro ao processar o cadastro."
+          );
+        } else {
+          alert(
+            "Não foi possível salvar o cadastro."
+          );
+        }
+
+      } else if (error.request) {
+        /*
+         * Se cair aqui, o navegador não conseguiu
+         * obter uma resposta do backend.
+         *
+         * Pode ser CORS ou backend indisponível.
+         */
+        console.error(
+          "A requisição foi enviada, mas não houve resposta."
+        );
+
+        alert(
+          "O navegador não conseguiu receber uma resposta do servidor. Verifique se o backend está rodando e se o CORS está configurado."
+        );
+
+      } else {
+        console.error("Erro:", error.message);
+
+        alert(
+          "Ocorreu um erro ao salvar o cadastro."
+        );
+      }
+
+    } finally {
+      setCarregando(false);
     }
+  };
 
-    router.push("/usuarios");
+  return (
+    <form
+      action={handlerSalvar}
+      className="space-y-6"
+    >
 
-    }
+      {/* =====================================
+          TIPO DE CADASTRO
+      ===================================== */}
+      {!usuarioExistente && (
+        <div className="space-y-3">
 
+          <label className="block text-sm font-semibold text-green-900">
+            Tipo de cadastro
+          </label>
 
-    return (
-        <form action={handlerSalvar} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                    <label className="block text-sm font-medium text-blue-200">
-                        Nome completo:
-                    </label>
-                    <input 
-                    name="nome" 
-                    value={usuario.nome}
-                    required
-                    onChange={(e)=> handlerChange('nome',e.target.value)}
-                    placeholder="João da Silva Sauro"
-                    className="w-full px-4 py-2.5 bg-blue-950 border border-blue-800 rounded-xl text-blue-100 placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 shadow-inner">
-                    </input>
-                </div>
-                <div className="space-y-2">
-                    <label className="block text-sm font-medium text-blue-200">
-                        CPF:
-                    </label>
-                    <input 
-                    name="CPF" 
-                    value={usuario.cpf}
-                    required
-                    placeholder="000.000.000-00"
-                    onChange={(e)=> handlerChange('cpf',e.target.value)}
-                    className="w-full px-4 py-2.5 bg-blue-950 border border-blue-800 rounded-xl text-blue-100 placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 shadow-inner">
-                    </input>
-                </div>
-                <div className="space-y-2">
-                    <label className="block text-sm font-medium text-blue-200">
-                        E-mail
-                    </label>
-                    <input 
-                    name="email" 
-                    value={usuario.email}
-                    required
-                    placeholder="EmailDoJoao@SilvaSauro.com.br"
-                    onChange={(e)=> handlerChange('email',e.target.value)}
-                    className="w-full px-4 py-2.5 bg-blue-950 border border-blue-800 rounded-xl text-blue-100 placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 shadow-inner">
-                    </input>
-                </div>
-                <div className="space-y-2">
-                    <label className="block text-sm font-medium text-blue-200">
-                        Senha:
-                    </label>
-                    <input 
-                    name="Senha" 
-                    value={usuario.senha}
-                    required
-                    placeholder= "*********************"
-                    onChange={(e)=> handlerChange('senha',e.target.value)}
-                    type="password" className="w-full px-4 py-2.5 bg-blue-950 border border-blue-800 rounded-xl text-blue-100 placeholder-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all duration-200 shadow-inner">
-                    </input>
-                </div>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-            <div className="flex items-center justify-end space-x-4 pt-4 border-t border-blue-800/80">
-                <Link href="/usuarios" className="px-5 py-2.5 bg-blue-800 hover:bg-blue-700 text-blue-200 hover:text-white font-medium text-sm rounded-xl transition-all duration-200 text-center border border-blue-700"> Cancelar</Link>
-                <button type="submit" className="px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm rounded-xl shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400"> Salvar</button>
-            </div>
-        </form>
-    );
+            {/* CONFEITEIRA */}
+            <button
+              type="button"
+              onClick={() =>
+                alterarTipo("CONFEITEIRA")
+              }
+              className={`p-5 rounded-2xl border text-left transition ${
+                usuario.tipo === "CONFEITEIRA"
+                  ? "border-green-500 bg-green-50 ring-2 ring-green-200"
+                  : "border-gray-200 bg-white hover:bg-green-50"
+              }`}
+            >
+              <div className="text-3xl mb-2">
+                👩‍🍳
+              </div>
+
+              <h3 className="font-bold text-green-900">
+                Confeiteira
+              </h3>
+
+              <p className="text-sm text-gray-500 mt-1">
+                Gerencia produtos e encomendas.
+              </p>
+            </button>
+
+            {/* CLIENTE */}
+            <button
+              type="button"
+              onClick={() =>
+                alterarTipo("CLIENTE")
+              }
+              className={`p-5 rounded-2xl border text-left transition ${
+                usuario.tipo === "CLIENTE"
+                  ? "border-pink-400 bg-pink-50 ring-2 ring-pink-200"
+                  : "border-gray-200 bg-white hover:bg-pink-50"
+              }`}
+            >
+              <div className="text-3xl mb-2">
+                👤
+              </div>
+
+              <h3 className="font-bold text-pink-900">
+                Cliente
+              </h3>
+
+              <p className="text-sm text-gray-500 mt-1">
+                Realiza e acompanha encomendas.
+              </p>
+            </button>
+
+          </div>
+        </div>
+      )}
+
+      {/* =====================================
+          CAMPOS
+      ===================================== */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        {/* NOME */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-green-900">
+            Nome completo
+          </label>
+
+          <input
+            name="nome"
+            value={usuario.nome}
+            required
+            onChange={(e) =>
+              handlerChange(
+                "nome",
+                e.target.value
+              )
+            }
+            placeholder="Nome completo"
+            className="w-full px-4 py-3 bg-green-50 border border-green-100 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-300"
+          />
+        </div>
+
+        {/* CPF */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-green-900">
+            CPF
+          </label>
+
+          <input
+            name="cpf"
+            value={usuario.cpf}
+            required
+            onChange={(e) =>
+              handlerChange(
+                "cpf",
+                e.target.value
+              )
+            }
+            placeholder="000.000.000-00"
+            className="w-full px-4 py-3 bg-green-50 border border-green-100 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-300"
+          />
+        </div>
+
+        {/* EMAIL */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-green-900">
+            E-mail
+          </label>
+
+          <input
+            name="email"
+            type="email"
+            value={usuario.email}
+            required
+            onChange={(e) =>
+              handlerChange(
+                "email",
+                e.target.value
+              )
+            }
+            placeholder="email@exemplo.com"
+            className="w-full px-4 py-3 bg-green-50 border border-green-100 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-300"
+          />
+        </div>
+
+        {/* SENHA */}
+        <div className="space-y-2">
+          <label className="block text-sm font-semibold text-green-900">
+            Senha
+          </label>
+
+          <input
+            name="senha"
+            type="password"
+            value={usuario.senha}
+            required
+            onChange={(e) =>
+              handlerChange(
+                "senha",
+                e.target.value
+              )
+            }
+            placeholder="Digite uma senha"
+            className="w-full px-4 py-3 bg-green-50 border border-green-100 rounded-xl text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-300"
+          />
+        </div>
+
+      </div>
+
+      {/* =====================================
+          BOTÕES
+      ===================================== */}
+      <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-6 border-t border-pink-100">
+
+        <Link
+          href="/usuarios"
+          className="px-5 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm rounded-xl transition text-center"
+        >
+          Cancelar
+        </Link>
+
+        <button
+          type="submit"
+          disabled={carregando}
+          className="px-6 py-3 bg-pink-400 hover:bg-pink-500 disabled:bg-pink-200 text-white font-semibold text-sm rounded-xl shadow-md transition"
+        >
+          {carregando
+            ? "Salvando..."
+            : usuarioExistente
+            ? "Salvar alterações"
+            : "Salvar cadastro"}
+        </button>
+
+      </div>
+
+    </form>
+  );
 }

@@ -1,5 +1,4 @@
-package com.example.aula20263.configuration;
-
+package com.example.sweetbakery.configurations;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

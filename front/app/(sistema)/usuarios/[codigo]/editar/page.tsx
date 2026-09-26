@@ -1,60 +1,81 @@
-"use client"
+"use client";
 
 import { Usuario } from "@/app/types/usuario";
-import axios from "@/node_modules/axios/index";
-import Link from "@/node_modules/next/link";
-import { useParams, useRouter } from "@/node_modules/next/navigation";
+import axios from "axios";
+import Link from "next/link";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import UsuarioForm from "../../components/UsuarioForm";
 
-export default function EditarUsuario(){
+export default function EditarUsuario() {
+  const parametro = useParams();
+  const codigo = Number(parametro.codigo);
 
-    const parametro = useParams();
+  const [usuario, setUsuario] = useState<Usuario | null>(null);
 
-    const codigo = Number(parametro.codigo);
+  const router = useRouter();
 
-    const [usuario,setUsuario] = useState<Usuario|null>(null)
-    const router = useRouter();
+  useEffect(() => {
+    buscarDados();
+  }, []);
 
-    useEffect(()=>{
+  const buscarDados = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-        buscarDados();
-
-    },[]);
-
-    const buscarDados =async() =>{
-
-        const valorUsuarioBack = await axios.get<Usuario>('http://localhost:8080/usuarios/'+codigo);
-
-        if(valorUsuarioBack.status==200){
-            setUsuario(valorUsuarioBack.data);
-        }else{
-            router.push("/usuarios")
+      const resposta = await axios.get<Usuario>(
+        `http://localhost:8080/usuarios/${codigo}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
 
+      if (resposta.status === 200) {
+        setUsuario(resposta.data);
+      }
+    } catch {
+      router.push("/usuarios");
     }
+  };
 
-    if(!usuario) return(<div className="p-8"> Carregando Dados ...</div>)
+  if (!usuario) {
+    return (
+      <div className="p-8 text-green-900">
+        Carregando dados...
+      </div>
+    );
+  }
 
+  return (
+    <div className="space-y-6">
 
-    return(
-        <div className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-blue-900 border border-blue-800 p-6 rounded-2xl shadow-lg">
-                <div className="space-y-1">
-                    <h1 className="text-2xl font-bold tracking-tight text-white flex items-center space-x-2">
-                        <span className="w-2.5 h-2.5 bg-blue-400 rounded-full inline-block"></span>
-                        <span>Editar Usuário {codigo}</span>
-                    </h1>
-                    <p className="text-sm text-blue-200">Preencha os dados para editar o Usuário</p>
-                </div>
-                <Link href="/usuarios" className="inline-flex items-center justify-center text-sm font-medium text-blue-200 hover:text-white bg-blue-800 hover:bg-blue-700 border border-blue-700 px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm w-full sm:w-auto">
-                    &larr; Voltar para Listagem
-                </Link>
-            </div>
-            <div className="bg-blue-900 border border-blue-800 rounded-2xl p-6 md:p-8 shadow-xl">
-                <UsuarioForm usuarioExistente={usuario}/>
-            </div>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-gradient-to-r from-green-700 to-green-600 p-6 rounded-3xl shadow-lg">
+
+        <div>
+          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+            👩‍🍳 Editar confeiteira
+          </h1>
+
+          <p className="text-sm text-green-100 mt-1">
+            Atualize os dados da confeiteira.
+          </p>
         </div>
-    )
 
+        <Link
+          href="/usuarios"
+          className="inline-flex items-center justify-center text-sm font-medium text-green-900 bg-white hover:bg-pink-50 px-4 py-2.5 rounded-xl transition shadow-sm"
+        >
+          &larr; Voltar
+        </Link>
+
+      </div>
+
+      <div className="bg-white border border-pink-100 rounded-3xl p-6 md:p-8 shadow-lg">
+        <UsuarioForm usuarioExistente={usuario} />
+      </div>
+
+    </div>
+  );
 }

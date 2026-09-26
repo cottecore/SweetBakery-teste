@@ -1,15 +1,17 @@
-export class Usuario{
-    constructor(
-        public id: number | null,
-        public nome:string,
-        public email:string,
-        public status:string,
-        public cpf:string,
-        public senha:string
-    ){}
+export type TipoUsuario = "CLIENTE" | "CONFEITEIRA";
+
+export class Usuario {
+  constructor(
+    public id: number | null,
+    public nome: string,
+    public email: string,
+    public status: string,
+    public cpf: string,
+    public senha: string,
+    public tipo: TipoUsuario = "CONFEITEIRA"
+  ) {}
 }
 
-export interface UsuarioFormProps{
-    usuarioExistente?:Usuario
+export interface UsuarioFormProps {
+  usuarioExistente?: Usuario;
 }
-

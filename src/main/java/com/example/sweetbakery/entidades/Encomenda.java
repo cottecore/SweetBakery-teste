@@ -4,9 +4,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -16,11 +20,14 @@ public class Encomenda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
-    private String prazo;
+    private LocalDate dataPedido;
+
+    private LocalDate prazo;
 
     private String classificacao;
 
+    @Enumerated(EnumType.STRING)
     private EnumStatusEncomenda statusEncomenda;
 }

@@ -1,4 +1,4 @@
-package com.example.sweetbakery.dtos;
+package com.example.sweetbakery.application.dtos;
 
 import com.example.sweetbakery.entidades.EnumStatusEncomenda;
 import com.example.sweetbakery.entidades.EnumStatusProduto;

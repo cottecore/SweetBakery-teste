@@ -1,26 +1,28 @@
-package com.example.sweetbakery.entidades;
+package com.example.sweetbakery.domain.entidades;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Produto {
+public class Encomenda {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nome;
+    private LocalDate dataPedido;
 
-    private Double valor;
+    private LocalDate prazo;
 
     private String classificacao;
 
     @Enumerated(EnumType.STRING)
-    private EnumStatusProduto statusProduto;
+    private EnumStatusEncomenda statusEncomenda;
 }

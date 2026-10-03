@@ -1,15 +1,14 @@
-package com.example.sweetbakery.services;
+package com.example.sweetbakery.application.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.example.sweetbakery.dtos.LoginRequest;
+import com.example.sweetbakery.application.dtos.LoginRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.Subject;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

@@ -1,4 +1,4 @@
-package com.example.sweetbakery.controllers;
+package com.example.sweetbakery.presentation;
 
 import com.example.sweetbakery.dtos.AtualizarStatusRequest;
 import com.example.sweetbakery.entidades.Encomenda;

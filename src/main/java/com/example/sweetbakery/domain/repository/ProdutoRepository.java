@@ -1,6 +1,6 @@
-package com.example.sweetbakery.repository;
-import com.example.sweetbakery.entidades.EnumStatusProduto;
-import com.example.sweetbakery.entidades.Produto;
+package com.example.sweetbakery.domain.repository;
+import com.example.sweetbakery.domain.entidades.EnumStatusProduto;
+import com.example.sweetbakery.domain.entidades.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.example.sweetbakery.entidades;
+package com.example.sweetbakery.domain.entidades;
 
 public enum EnumStatusProduto {
     ATIVO,

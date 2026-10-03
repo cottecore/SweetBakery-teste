@@ -1,4 +1,4 @@
-package com.example.sweetbakery.controllers;
+package com.example.sweetbakery.presentation;
 
 import com.example.sweetbakery.entidades.Cliente;
 import com.example.sweetbakery.repository.ClienteRepository;

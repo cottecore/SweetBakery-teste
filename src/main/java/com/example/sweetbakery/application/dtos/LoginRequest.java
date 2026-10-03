@@ -1,4 +1,4 @@
-package com.example.sweetbakery.dtos;
+package com.example.sweetbakery.application.dtos;
 
 public record LoginRequest(String email, String senha) {
 

@@ -1,4 +1,4 @@
-package com.example.sweetbakery.entidades;
+package com.example.sweetbakery.domain.entidades;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,4 +1,5 @@
-package com.example.sweetbakery.configurations;
+package com.example.sweetbakery.infra.configurations;
+
 
 import com.example.sweetbakery.application.services.TokenService;
 import jakarta.servlet.FilterChain;

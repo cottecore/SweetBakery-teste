@@ -11,6 +11,8 @@ import java.util.Optional;
 @Repository
 public interface ConfeiteiraRepository extends JpaRepository<Confeiteira,Long> {
 
+
+
     boolean existsUsuarioByEmailAndSenha(String email, String senha);
 
     Optional<List<Confeiteira>> findByStatusNot(EnumStatusUsuario status);

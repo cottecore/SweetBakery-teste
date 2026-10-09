@@ -1,9 +1,9 @@
 package com.example.sweetbakery.presentation;
 
+import com.example.sweetbakery.domain.entidades.Confeiteira;
+import com.example.sweetbakery.domain.entidades.EnumStatusUsuario;
+import com.example.sweetbakery.domain.repository.ConfeiteiraRepository;
 import com.example.sweetbakery.dtos.AtualizarStatusRequest;
-import com.example.sweetbakery.entidades.Confeiteira;
-import com.example.sweetbakery.entidades.EnumStatusUsuario;
-import com.example.sweetbakery.repository.ConfeiteiraRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

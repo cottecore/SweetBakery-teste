@@ -1,9 +1,7 @@
         package com.example.sweetbakery.presentation;
 
-import com.example.sweetbakery.dtos.LoginRequest;
-import com.example.sweetbakery.dtos.LoginResponse;
-import com.example.sweetbakery.repository.ConfeiteiraRepository;
-import com.example.sweetbakery.services.TokenService;
+import com.example.sweetbakery.application.dtos.LoginRequest;
+import com.example.sweetbakery.application.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,31 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     @Autowired
-    private TokenService tokenService;
-
-    @Autowired
-    private ConfeiteiraRepository confeiteiraRepository;
+    private UsuarioService usuarioService;
 
     @PostMapping("/login")
-    @Operation(
-            summary = "Login",
-            description = "Método responsável por efetuar o login da confeiteira!"
-    )
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    @Operation(summary = "Login", description = "Método responsavel por efetuar o login do usuário!")
+    public ResponseEntity<?> login(@RequestBody LoginRequest resquest) {
 
-        if (confeiteiraRepository.existsUsuarioByEmailAndSenha(
-                request.email(),
-                request.senha()
-        )) {
+        var resultadoAutenticacaoRetornoToken = usuarioService.validarUsuarioAutenticadoRetornaToken(resquest);
 
-            var token = tokenService.gerarToken(request);
-
-            return ResponseEntity.ok(new LoginResponse(token));
+        if (resultadoAutenticacaoRetornoToken != null) {
+            return ResponseEntity.ok(resultadoAutenticacaoRetornoToken);
         }
+        return ResponseEntity.badRequest().body("Usuário ou senha Invalido!");
 
-        return ResponseEntity
-                .badRequest()
-                .body("Usuário ou senha inválido!");
     }
 }
 

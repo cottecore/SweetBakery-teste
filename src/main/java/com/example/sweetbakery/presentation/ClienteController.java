@@ -1,7 +1,7 @@
 package com.example.sweetbakery.presentation;
 
-import com.example.sweetbakery.entidades.Cliente;
-import com.example.sweetbakery.repository.ClienteRepository;
+import com.example.sweetbakery.domain.entidades.Cliente;
+import com.example.sweetbakery.domain.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

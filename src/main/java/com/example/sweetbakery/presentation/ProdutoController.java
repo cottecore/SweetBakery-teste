@@ -1,10 +1,11 @@
 package com.example.sweetbakery.presentation;
 
+import com.example.sweetbakery.domain.entidades.EnumStatusProduto;
+import com.example.sweetbakery.domain.entidades.Produto;
+import com.example.sweetbakery.domain.repository.ProdutoRepository;
 import com.example.sweetbakery.dtos.AtualizarStatusRequest;
 
-import com.example.sweetbakery.entidades.EnumStatusProduto;
-import com.example.sweetbakery.entidades.Produto;
-import com.example.sweetbakery.repository.ProdutoRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

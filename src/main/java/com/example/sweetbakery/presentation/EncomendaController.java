@@ -1,9 +1,9 @@
 package com.example.sweetbakery.presentation;
 
+import com.example.sweetbakery.domain.entidades.Encomenda;
+import com.example.sweetbakery.domain.entidades.EnumStatusEncomenda;
+import com.example.sweetbakery.domain.repository.EncomendaRepository;
 import com.example.sweetbakery.dtos.AtualizarStatusRequest;
-import com.example.sweetbakery.entidades.Encomenda;
-import com.example.sweetbakery.entidades.EnumStatusEncomenda;
-import com.example.sweetbakery.repository.EncomendaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

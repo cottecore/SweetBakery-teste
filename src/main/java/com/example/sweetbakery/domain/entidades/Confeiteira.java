@@ -1,9 +1,7 @@
 package com.example.sweetbakery.domain.entidades;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.example.sweetbakery.domain.valueobject.CPF;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +18,8 @@ public class Confeiteira {
 
     private String nome;
 
-    private String cpf;
+    @EmbeddedId
+    private CPF cpf;
 
     private String senha;
 

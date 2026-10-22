@@ -1,5 +1,7 @@
 package com.example.sweetbakery.presentation;
 
+import com.example.sweetbakery.application.dtos.UsuarioRequest;
+import com.example.sweetbakery.application.dtos.UsuarioResponse;
 import com.example.sweetbakery.domain.entidades.Confeiteira;
 import com.example.sweetbakery.domain.entidades.EnumStatusUsuario;
 import com.example.sweetbakery.domain.repository.ConfeiteiraRepository;
@@ -26,11 +28,12 @@ public class ConfeiteiraController {
         return  ResponseEntity.ok(confeiteiraRepository.findAll());
     }
 
+    //mudar usando o do sor
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Metodo de criação d de usuarios!", description = "metodo para reponsavel em criar novos usuarios")
 
-    public ResponseEntity<Confeiteira> criar(@RequestBody Confeiteira confeiteira){
+    public ResponseEntity<UsuarioResponse> criar(@RequestBody UsuarioRequest confeiteira){
 
         var confeiteiraBanco = confeiteiraRepository.save(confeiteira);
         return ResponseEntity.ok(confeiteiraBanco);

@@ -1,6 +1,7 @@
         package com.example.sweetbakery.presentation;
 
 import com.example.sweetbakery.application.dtos.LoginRequest;
+import com.example.sweetbakery.application.services.TokenService;
 import com.example.sweetbakery.application.services.UsuarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-@Tag(description = "teste", name = "teste")
+@Tag(name = "Autenticação controller",description = "Controller responsavel pela autencicação da aplicação!")
 public class AuthController {
+
+    @Autowired
+    private TokenService tokenService;
 
     @Autowired
     private UsuarioService usuarioService;

@@ -1,7 +1,10 @@
 package com.example.sweetbakery.presentation;
 
+import com.example.sweetbakery.application.dtos.CriarAdminRequest;
+import com.example.sweetbakery.application.dtos.CriarAdminResponse;
 import com.example.sweetbakery.application.dtos.UsuarioRequest;
 import com.example.sweetbakery.application.dtos.UsuarioResponse;
+import com.example.sweetbakery.application.services.UsuarioService;
 import com.example.sweetbakery.domain.entidades.Confeiteira;
 import com.example.sweetbakery.domain.entidades.EnumStatusUsuario;
 import com.example.sweetbakery.domain.repository.ConfeiteiraRepository;
@@ -19,7 +22,36 @@ import org.springframework.web.bind.annotation.*;
 public class ConfeiteiraController {
 
     @Autowired
+    private UsuarioService usuarioService;
+
+    @Autowired
     private ConfeiteiraRepository confeiteiraRepository;
+
+
+    @PostMapping("/admin")
+    public ResponseEntity<CriarAdminResponse> criarAdmin(@RequestBody CriarAdminRequest criarAdminRequest){
+
+        try{
+            CriarAdminResponse respostaSalvar = usuarioService.criarAdmin(criarAdminRequest);
+            return ResponseEntity.ok(respostaSalvar);
+
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UsuarioResponse> buscarPorId(@PathVariable Long id){
+
+        UsuarioResponse usuarioBanco = usuarioService.buscarPorId(id);
+        if(usuarioBanco!= null ){
+            return  ResponseEntity.ok(usuarioBanco);
+        }
+
+        return  ResponseEntity.notFound().build();
+    }
+
 
     @GetMapping
     @Operation(summary = "Metodo de consulta de lista de usuarios!", description = "metodo para reponsavel em efetuar consulta de usuarios sem filtro")
@@ -31,12 +63,14 @@ public class ConfeiteiraController {
     //mudar usando o do sor
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Metodo de criação d de usuarios!", description = "metodo para reponsavel em criar novos usuarios")
+    public ResponseEntity<?> criar(@RequestBody UsuarioRequest usuario){
 
-    public ResponseEntity<UsuarioResponse> criar(@RequestBody UsuarioRequest confeiteira){
-
-        var confeiteiraBanco = confeiteiraRepository.save(confeiteira);
-        return ResponseEntity.ok(confeiteiraBanco);
+        try {
+            UsuarioResponse usuarioBanco = usuarioService.salvarUsuario(usuario,0L);
+            return ResponseEntity.ok(usuarioBanco);
+        }catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
 
     }
 

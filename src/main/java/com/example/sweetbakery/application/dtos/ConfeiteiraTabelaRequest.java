@@ -1,4 +1,4 @@
 package com.example.sweetbakery.application.dtos;
 
-public class ConfeiteiraTabelaRequest (Long cargo_id){
+public record ConfeiteiraTabelaRequest (Long cargo_id){
 }

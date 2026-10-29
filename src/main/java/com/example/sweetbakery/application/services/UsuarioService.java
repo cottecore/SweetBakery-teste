@@ -9,6 +9,7 @@ import com.example.sweetbakery.domain.valueobject.CPF;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.example.sweetbakery.domain.entidades.EnumStatusUsuario;
 
 import java.util.List;
 

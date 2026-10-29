@@ -18,14 +18,26 @@ public class SecurityConfiguration {
     @Autowired
     private  JwtFilter jwtFilter;
 
-    //terminar isso do sor/ ir pro jtwfilter/criar um token repository/criar token em entidades/mudar token service again/criar usuarioLogado em dto/verificartoken em tokenservice
-    //usuario/security
+//UsuarioService ainda ta com o status dando problema/cargo_id do usuario service não funciona
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain (HttpSecurity http) throws Exception{
+
         return http.cors(Customizer.withDefaults())
-                .csrf(AbstractHttpConfigurer:: disable)
-                .authorizeHttpRequests(Auth)
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                                .requestMatchers("/auth/login",
+                                        "/swagger-ui/**",
+                                        "/webjars/**",
+                                        "/swagger-resources/**",
+                                        "/v3/api-docs/**"
+                                ).permitAll()
+//                        .requestMatchers("/usuarios/**")
+//                            .hasRole("ADMIN")
+                                .anyRequest().authenticated()
+                )
+                .addFilterBefore( jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
+
     }
 };

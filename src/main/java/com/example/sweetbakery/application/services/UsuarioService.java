@@ -1,7 +1,9 @@
 package com.example.sweetbakery.application.services;
 
 import com.example.sweetbakery.application.dtos.*;
+import com.example.sweetbakery.domain.entidades.Cargo;
 import com.example.sweetbakery.domain.entidades.Confeiteira;
+import com.example.sweetbakery.domain.repository.CargoRepository;
 import com.example.sweetbakery.domain.repository.ConfeiteiraRepository;
 import com.example.sweetbakery.domain.valueobject.CPF;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,10 @@ public class UsuarioService {
 
     @Autowired
     private ConfeiteiraRepository confeiteiraRepository;
+
+    @Autowired
+    private CargoRepository cargoRepository;
+
 
     @Autowired
     private TokenService tokenService;
@@ -105,5 +111,29 @@ public class UsuarioService {
     }
 
 
+    public boolean CadastrarConfeiteiraTabela(Long id, ConfeiteiraTabelaRequest confeiteiraTabelaRequest) {
+
+        Confeiteira usuarioBanco = confeiteiraRepository.findById(id).orElse(null);
+        Cargo cargoBanco = cargoRepository.findById(confeiteiraTabelaRequest.cargo_id()).orElse(null);
+        if(usuarioBanco!= null && cargoBanco!= null) {
+
+            var curso =  usuarioBanco.getCargo().stream()
+                    .anyMatch(u->u.getId().equals(cargoBanco.getId()));
+
+            if(curso){
+                return true;
+            }else {
+                usuarioBanco.getCargo().add(cargoBanco);
+
+                confeiteiraRepository.save(usuarioBanco);
+
+
+                return true;
+            }
+
+        }
+        return false;
+
+    }
 
 }

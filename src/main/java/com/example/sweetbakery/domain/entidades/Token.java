@@ -24,12 +24,12 @@ public class Token {
 
     @ManyToOne
     @JoinColumn(name = "usuario_id", referencedColumnName = "id")
-    private Confeiteira usuario;
+    private Confeiteira confeiteira;
 
-    public Token(String token, Confeiteira usuario) {
+    public Token(String token, Confeiteira confeiteira) {
 
         this.setToken(token);
-        this.setUsuario(usuario);
+        this.setConfeiteira(confeiteira);
         this.setDataCadastro(LocalDateTime.now());
     }
 }

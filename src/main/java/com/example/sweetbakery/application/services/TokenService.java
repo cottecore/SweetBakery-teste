@@ -7,8 +7,11 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.example.sweetbakery.application.dtos.LoginRequest;
 import com.example.sweetbakery.application.dtos.UsuarioLogado;
+import com.example.sweetbakery.domain.repository.ConfeiteiraRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import com.example.sweetbakery.domain.repository.TokenRepository;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -24,6 +27,12 @@ public class TokenService {
 
     @Value("${spring.emissor}")
     private String emissor;
+
+    @Autowired
+    private ConfeiteiraRepository confeiteiraRepository;
+
+    @Autowired
+    private TokenRepository tokenRepository;
 
 
 

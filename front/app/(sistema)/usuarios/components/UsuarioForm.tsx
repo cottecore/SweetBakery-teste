@@ -6,7 +6,7 @@ import {
   TipoUsuario,
 } from "@/app/types/usuario";
 
-import axios from "axios";
+import { atualizarUsuario, salvarUsuario } from "@/app/services/usuarioService";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -62,15 +62,15 @@ export default function UsuarioForm({
     });
   };
 
+
+  //axios antes
+  /*
   const handlerSalvar = async () => {
     setCarregando(true);
 
     try {
-      /*
-       * =====================================
-       * EDITAR CONFEITEIRA
-       * =====================================
-       */
+
+    
       if (usuarioExistente) {
         const token = localStorage.getItem("token");
 
@@ -100,12 +100,46 @@ export default function UsuarioForm({
 
         return;
       }
+      */
 
-      /*
-       * =====================================
-       * CADASTRAR CLIENTE
-       * =====================================
-       */
+      //novo
+const handlerSalvar = async () => {
+    setCarregando(true);
+
+    try {
+        if (usuarioExistente) {
+            const dadosRetorno = await atualizarUsuario(usuario);
+
+            if (dadosRetorno) {
+                alert("Confeiteira atualizada com sucesso!");
+            } else {
+                alert("Erro ao atualizar Confeiteira!");
+                return;
+            }
+
+        } else {
+            const dadosRetorno = await salvarUsuario(usuario);
+
+            if (dadosRetorno) {
+                alert("Confeiteira salva com sucesso!");
+            } else {
+                alert("Erro ao salvar Confeiteira!");
+                return;
+            }
+        }
+
+        router.push("/usuarios");
+
+    } catch (erro) {
+        console.error("Erro ao salvar Confeiteira:", erro);
+        alert("Ocorreu um erro ao salvar a Confeiteira!");
+
+    } finally {
+        setCarregando(false);
+    }
+};
+
+
       if (usuario.tipo === "CLIENTE") {
         const resposta = await axios.post(
           "http://localhost:8080/cliente",

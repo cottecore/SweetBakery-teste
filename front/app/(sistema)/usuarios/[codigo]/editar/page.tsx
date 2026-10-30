@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import UsuarioForm from "../../components/UsuarioForm";
+import { consultaUsuarioPorId } from "@/app/services/usuarioService";
 
 export default function EditarUsuario() {
   const parametro = useParams();

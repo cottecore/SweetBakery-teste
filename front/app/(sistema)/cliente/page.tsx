@@ -12,6 +12,8 @@ export default function Clientes() {
     carregarDados();
   }, []);
 
+  //axios
+
   const carregarDados = async () => {
     try {
       const resposta = await axios.get<Cliente[]>(
@@ -24,6 +26,8 @@ export default function Clientes() {
       alert("Erro ao carregar dados!");
     }
   };
+
+  //  //axios
 
   const handleDeletarCliente = async (cliente: Cliente) => {
     try {
@@ -42,6 +46,7 @@ export default function Clientes() {
       alert("Não foi possível excluir o cliente.");
     }
   };
+
 
   return (
     <div className="w-full bg-slate-50 p-6 md:p-8 font-sans">

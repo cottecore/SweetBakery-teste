@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import EncomendaForm from "../../components/encomendaForm";
+import { consultaEncomendaPorId } from "@/app/services/encomendaService";
 
 export default function EditarEncomenda() {
 
@@ -26,39 +27,16 @@ export default function EditarEncomenda() {
   }, []);
 
 
+  //axios
   const buscarDados = async () => {
 
-    try {
+    const valorEncomendaBack = await consultaEncomendaPorId(codigo);
+        if(valorEncomendaBack){
+            setEncomenda(valorEncomendaBack);
+        }else{
+            router.push("/encomenda")
+        }
 
-      const resposta = await axios.get<Encomenda[]>(
-        "http://localhost:8080/encomenda"
-      );
-
-
-      const encontrada = resposta.data.find(
-        (item) => item.id === codigo
-      );
-
-
-      if (encontrada) {
-
-        setEncomenda(encontrada);
-
-      } else {
-
-        router.push("/encomendas");
-
-      }
-
-    } catch (error) {
-
-      console.error(error);
-
-      router.push("/encomendas");
-
-    }
-
-  };
 
 
   if (!encomenda) {
@@ -182,4 +160,5 @@ export default function EditarEncomenda() {
 
   );
 
+}
 }

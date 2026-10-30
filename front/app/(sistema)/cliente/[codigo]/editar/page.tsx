@@ -1,7 +1,7 @@
 "use client";
 
+import { atualizarUsuario, consultaUsuarioPorId, salvarUsuario } from "@/app/services/usuarioService";
 import { Cliente } from "@/app/types/cliente";
-import axios from "axios";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,29 +19,18 @@ export default function EditarCliente() {
   useEffect(() => {
     buscarDados();
   }, []);
+  
+    //axios que foi mudado
 
   const buscarDados = async () => {
 
-    try {
-
-      const resposta = await axios.get<Cliente>(
-        `http://localhost:8080/cliente/${codigo}`
-      );
-
-      if (resposta.status === 200) {
-        setCliente(resposta.data);
-      }
-
-    } catch (error) {
-
-      console.error(
-        "Erro ao buscar cliente:",
-        error
-      );
-
-      router.push("/cliente");
+    const valorUsuarioBack = await consultaUsuarioPorId(codigo);
+    if(valorUsuarioBack){
+        setCliente(valorUsuarioBack);
+    }else{
+        router.push("/usuarios")
     }
-  };
+
 
   if (!cliente) {
     return (
@@ -95,4 +84,4 @@ export default function EditarCliente() {
 
     </div>
   );
-}
+}}

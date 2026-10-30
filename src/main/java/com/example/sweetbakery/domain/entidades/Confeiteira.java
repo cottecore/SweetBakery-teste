@@ -54,7 +54,7 @@ public class Confeiteira  implements UserDetails {
     )
     private Set<Cargo> cargo = new HashSet<>();
 
-    public void matricular(Cargo cargo){
+    public void cadastrar(Cargo cargo){
         this.cargo.add(cargo);
     }
 

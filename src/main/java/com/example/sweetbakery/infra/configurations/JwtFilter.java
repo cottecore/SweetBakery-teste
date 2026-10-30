@@ -7,6 +7,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -28,11 +30,8 @@ public class JwtFilter extends OncePerRequestFilter {
                 || uri.startsWith("/v2/api-docs")
                 || uri.startsWith("/v3/api-docs")
                 || uri.startsWith("/swagger-resources")
-                || uri.startsWith("/webjars")
+                || uri.startsWith("webjars")
                 || uri.startsWith("/auth/login")
-                || (uri.equals("/usuarios") && request.getMethod().equals("POST"))
-                || (uri.equals("/cliente") && request.getMethod().equals("POST"))
-                || uri.startsWith("/")
         ){
             filterChain.doFilter(request,response);
             return;
@@ -47,9 +46,17 @@ public class JwtFilter extends OncePerRequestFilter {
 
             try{
 
-                var jwtValidador = tokenService.verificarToken(token);
+                var usuarioLogado = tokenService.verificarToken(token);
 
-                System.out.println(jwtValidador.getSubject());
+
+                var user = new UsernamePasswordAuthenticationToken(
+                        usuarioLogado,
+                        null,
+                        usuarioLogado.authorities()
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(user);
+
 
             } catch (Exception e) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

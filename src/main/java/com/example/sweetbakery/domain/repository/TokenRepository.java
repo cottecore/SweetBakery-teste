@@ -1,6 +1,6 @@
 package com.example.sweetbakery.domain.repository;
 
-import ch.qos.logback.core.subst.Token;
+import com.example.sweetbakery.domain.entidades.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

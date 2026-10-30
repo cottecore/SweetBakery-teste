@@ -3,9 +3,12 @@
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { LoginResponse } from "../types/auth";
+import { useDispatch } from "react-redux";
 
 export default function Login() {
   const router = useRouter();
+
+  const dispatch = useDispatch();
 
   const handleLogin = async (formData: FormData) => {
     const email = formData.get("email")?.toString() ?? "";
@@ -26,8 +29,8 @@ export default function Login() {
       );
 
       if (resposta.status === 200) {
-        localStorage.setItem("token", resposta.data.token);
-        localStorage.setItem("emailUsuario", email);
+//        localStorage.setItem("token", resposta.data.token);
+//        localStorage.setItem("emailUsuario", email);
 
         router.push("/home");
       }

@@ -63,3 +63,8 @@ export async function  salvarUsuario (usuario:Usuario): Promise<number>{
     api.post<number>('http://localhost:8080/usuarios',usuario);
     return dadosRetorno.data;
 }
+
+//terminar isso
+export async function buscarUsuarioLogado() : Promisse {
+    
+}

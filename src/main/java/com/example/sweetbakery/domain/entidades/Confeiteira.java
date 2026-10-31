@@ -31,7 +31,7 @@ public class Confeiteira  implements UserDetails {
 
     private String nome;
 
-    @EmbeddedId
+    @Embedded
     private CPF cpf;
 
     private String senha;

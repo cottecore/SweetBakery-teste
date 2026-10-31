@@ -26,7 +26,7 @@ public class UsuarioService {
     @Autowired
     private TokenService tokenService;
 
-    @Value("${spring.secretkey}")
+    @Value("${spring.secret}")
     private String secret;
 
     public LoginResponse validarUsuarioAutenticadoRetornaToken(LoginRequest resquest) {
@@ -52,7 +52,7 @@ public class UsuarioService {
     public CriarAdminResponse criarAdmin(CriarAdminRequest criarAdminRequest) {
 
         if(!criarAdminRequest.secretKey().equals(secret)){
-            return new CriarAdminResponse(0L,"Usuario Salvo com sucesso!");
+            return new CriarAdminResponse(0L,"Chave secreta inválida!");
 
         }
 
